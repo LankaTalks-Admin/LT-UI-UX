@@ -22,6 +22,7 @@ export default function Header() {
     (item) => item.href && location.pathname.startsWith(item.href),
   )
   const isHome = location.pathname === '/'
+  const showSectors = isHome || location.pathname.startsWith('/stories')
   const tagline = isHome ? siteConfig.tagline : activeTab?.label || siteConfig.tagline
   const sectorsRef = useRef(null)
 
@@ -111,7 +112,9 @@ export default function Header() {
           </div>
 
           <div className="flex items-center">
-            {navItems.filter((item) => item.right).map((item) => {
+            {navItems
+              .filter((item) => item.right && (showSectors || !item.hasDropdown))
+              .map((item) => {
               if (item.hasDropdown) {
                 return (
                   <div
@@ -207,6 +210,7 @@ export default function Header() {
             <div className="flex flex-wrap gap-1">
               {navItems.map((item) => {
                 if (item.hasDropdown) {
+                  if (!showSectors) return null
                   return (
                     <button
                       key={item.label}

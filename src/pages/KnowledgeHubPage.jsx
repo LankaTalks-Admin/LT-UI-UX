@@ -363,7 +363,7 @@ export default function KnowledgeHubPage() {
             {/* ─── Report Table ─── */}
             <div>
               {/* Table header bar */}
-              <div className="mb-3 flex items-center justify-between">
+              <div className="mb-3 flex flex-wrap items-center justify-between gap-3">
                 <div className="flex items-center gap-3">
                   <h2 className="text-lg font-extrabold uppercase tracking-wide text-slate-900">
                     Reports

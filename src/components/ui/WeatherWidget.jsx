@@ -18,7 +18,7 @@ export default function WeatherWidget() {
   const Icon = weatherIcons[weather.condition] ?? CloudSun
 
   return (
-    <div className="flex flex-col items-center px-2 leading-none text-slate-600" title={weather.location}>
+    <div className="hidden flex-col items-center px-2 leading-none text-slate-600 sm:flex" title={weather.location}>
       <div className="flex items-center gap-1.5">
         <Icon className="size-5" aria-hidden="true" />
         <span className="font-mono text-[13px] font-bold">

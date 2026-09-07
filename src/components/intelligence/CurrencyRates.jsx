@@ -52,7 +52,7 @@ function PrimaryRateCard({ currency }) {
         <span className="text-[9px] text-slate-400">Live · Jun 6, 2026</span>
       </div>
 
-      <div className="flex items-center gap-6 p-5">
+      <div className="flex flex-wrap items-center gap-6 p-5">
         <div className="flex items-center gap-4">
           <span className="text-4xl" aria-hidden="true">{currency.flag}</span>
           <div>
@@ -213,7 +213,7 @@ export default function CurrencyRates({ currencies }) {
       </div>
 
       {/* All rates table */}
-      <div className="overflow-hidden rounded border border-slate-200 bg-white">
+<div className="overflow-x-auto rounded border border-slate-200 bg-white">
         <div className="flex items-center justify-between border-b border-slate-100 bg-slate-50 px-5 py-2.5">
           <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500">
             All Rates

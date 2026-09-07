@@ -9,7 +9,7 @@ export default function AuthWidget() {
         className="flex items-center gap-1.5 whitespace-nowrap px-2 text-[11px] font-bold uppercase tracking-wider text-brand-700 transition-colors hover:text-brand-800"
       >
         <LogIn className="size-4" aria-hidden="true" />
-        Sign In
+        <span className="hidden md:inline">Sign In</span>
       </a>
     )
   }

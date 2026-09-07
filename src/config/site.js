@@ -28,7 +28,7 @@ export const siteConfig = {
 }
 
 export const navItems = [
-  { label: 'Stories', href: '/stories', active: true },
+  { label: 'Stories', href: '/stories' },
   { label: 'Intelligence', href: '/intelligence' },
   { label: 'Tenders', href: '/tenders' },
   { label: 'Careers', href: '/careers' },

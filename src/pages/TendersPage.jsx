@@ -1,4 +1,4 @@
-import { useMemo, useState, useCallback } from 'react'
+import { Fragment, useMemo, useRef, useState, useCallback } from 'react'
 import {
   Building2,
   Calendar,
@@ -99,6 +99,12 @@ function Dropdown({ label, icon: Icon, options, value, onChange }) {
 
 const PAGE_SIZE = 6
 
+function getPageWindow(current, total) {
+  if (total <= 7) return Array.from({ length: total }, (_, i) => i + 1)
+  const pages = new Set([1, total, current - 1, current, current + 1])
+  return [...pages].filter((p) => p >= 1 && p <= total).sort((a, b) => a - b)
+}
+
 export default function TendersPage() {
   const [search, setSearch] = useState('')
   const [selectedCategory, setSelectedCategory] = useState('All Sectors')
@@ -109,6 +115,16 @@ export default function TendersPage() {
   const [selectedTender, setSelectedTender] = useState(null)
   const [showFilters, setShowFilters] = useState(false)
   const [currentPage, setCurrentPage] = useState(1)
+  const detailRef = useRef(null)
+
+  const handleSelectTender = useCallback((tender) => {
+    setSelectedTender(tender)
+    if (window.matchMedia('(max-width: 1023px)').matches) {
+      requestAnimationFrame(() => {
+        detailRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+      })
+    }
+  }, [])
 
   const filtered = useMemo(() => {
     let result = tendersWithStatus
@@ -494,7 +510,7 @@ export default function TendersPage() {
                   return (
                     <div
                       key={t.id}
-                      onClick={() => setSelectedTender(t)}
+                      onClick={() => handleSelectTender(t)}
                       className={`group cursor-pointer rounded-xl border bg-white p-4 transition-all hover:shadow-md ${
                         isSelected
                           ? 'border-brand-400 ring-2 ring-brand-100 shadow-md'
@@ -576,19 +592,25 @@ export default function TendersPage() {
                 >
                   <ChevronLeft className="size-4" />
                 </button>
-                {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
-                  <button
-                    key={page}
-                    type="button"
-                    onClick={() => setCurrentPage(page)}
-                    className={`flex size-8 items-center justify-center rounded-lg text-[12px] font-semibold transition-all ${
-                      currentPage === page
-                        ? 'bg-secondary-900 text-white shadow-md shadow-secondary-900/20'
-                        : 'border border-slate-200 bg-white text-slate-600 hover:border-slate-300 hover:bg-slate-50'
-                    }`}
-                  >
-                    {page}
-                  </button>
+                {getPageWindow(currentPage, totalPages).map((page, idx, arr) => (
+                  <Fragment key={page}>
+                    {idx > 0 && page - arr[idx - 1] > 1 && (
+                      <span className="px-1 text-[10px] text-slate-400" aria-hidden="true">
+                        &hellip;
+                      </span>
+                    )}
+                    <button
+                      type="button"
+                      onClick={() => setCurrentPage(page)}
+                      className={`flex size-8 items-center justify-center rounded-lg text-[12px] font-semibold transition-all ${
+                        currentPage === page
+                          ? 'bg-secondary-900 text-white shadow-md shadow-secondary-900/20'
+                          : 'border border-slate-200 bg-white text-slate-600 hover:border-slate-300 hover:bg-slate-50'
+                      }`}
+                    >
+                      {page}
+                    </button>
+                  </Fragment>
                 ))}
                 <button
                   type="button"
@@ -603,10 +625,18 @@ export default function TendersPage() {
           </div>
 
           {/* Detail Panel */}
-          <div className="hidden lg:col-span-7 lg:block">
+          <div
+            ref={detailRef}
+            className={`scroll-mt-28 lg:col-span-7 ${
+              selectedTender ? 'max-lg:order-first max-lg:block' : 'hidden lg:block'
+            }`}
+          >
             <div className="sticky top-26 rounded-xl border border-slate-200 bg-white shadow-sm">
               {selectedTender ? (
-                <TenderDetail tender={selectedTender} />
+                <TenderDetail
+                  tender={selectedTender}
+                  onClose={() => setSelectedTender(null)}
+                />
               ) : (
                 <div className="flex flex-col items-center justify-center py-38 text-center">
                   <div className="flex size-16 items-center justify-center rounded-2xl bg-slate-100">
@@ -649,10 +679,23 @@ function FilterChip({ label, onRemove }) {
   )
 }
 
-function TenderDetail({ tender }) {
+function TenderDetail({ tender, onClose }) {
   const Icon = categoryIcons[tender.sectorIcon] ?? Building2
   return (
     <div className="p-6">
+      {onClose && (
+        <div className="mb-4 lg:hidden">
+          <button
+            type="button"
+            onClick={onClose}
+            className="inline-flex items-center gap-1.5 rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-[11px] font-semibold text-slate-600 transition-colors hover:bg-slate-50"
+          >
+            <X className="size-3.5" />
+            Back to list
+          </button>
+        </div>
+      )}
+
       {/* Header Row */}
       <div className="flex flex-wrap items-center gap-2 mb-4">
         {tender.isNew && (

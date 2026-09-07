@@ -16,6 +16,7 @@ export default function Header() {
   const location = useLocation()
   const [menuOpen, setMenuOpen] = useState(false)
   const [sectorsOpen, setSectorsOpen] = useState(false)
+  const [sectorsMenuOpen, setSectorsMenuOpen] = useState(false)
   const sectorsTimer = useRef(null)
   const activeTab = navItems.find(
     (item) => item.href && location.pathname.startsWith(item.href),
@@ -59,7 +60,7 @@ export default function Header() {
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-4 px-4 sm:px-6">
         <Link to="/" className="flex items-center gap-3">
           <img src={ltLogo} alt="LankaTalks" className="h-10 w-auto" />
-          <span className="text-2xl font-light text-slate-300">|</span>
+          <span className="hidden text-2xl font-light text-slate-300 md:inline">|</span>
           <span className="hidden text-[11px] font-bold uppercase tracking-[0.2em] text-slate-500 md:block">
             {tagline}
           </span>
@@ -78,7 +79,10 @@ export default function Header() {
           <button
             type="button"
             aria-label={menuOpen ? 'Close menu' : 'Open menu'}
-            onClick={() => setMenuOpen((v) => !v)}
+            onClick={() => {
+              setMenuOpen((v) => !v)
+              setSectorsMenuOpen(false)
+            }}
             className="p-2 text-slate-600 transition-colors hover:bg-slate-100 lg:hidden"
           >
             {menuOpen ? <X className="size-6" /> : <Menu className="size-6" />}
@@ -89,18 +93,21 @@ export default function Header() {
       <nav className="hidden bg-[#A9000C] lg:block" aria-label="Primary">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-4 sm:px-6">
           <div className="flex items-center">
-            {navItems.filter((item) => !item.right).map((item) => (
-              <Link
-                key={item.label}
-                to={item.href}
-                className={cn(
-                  'px-4 py-2.5 text-[13px] font-bold uppercase tracking-wide text-white transition-colors hover:bg-white/15',
-                  item.active && 'bg-white/15',
-                )}
-              >
-                {item.label}
-              </Link>
-            ))}
+            {navItems.filter((item) => !item.right).map((item) => {
+              const isActive = activeTab?.label === item.label
+              return (
+                <Link
+                  key={item.label}
+                  to={item.href}
+                  className={cn(
+                    'px-4 py-2.5 text-[13px] font-bold uppercase tracking-wide text-white transition-colors hover:bg-white/15',
+                    isActive && 'bg-white/15',
+                  )}
+                >
+                  {item.label}
+                </Link>
+              )
+            })}
           </div>
 
           <div className="flex items-center">
@@ -183,7 +190,7 @@ export default function Header() {
                   to={item.href}
                   className={cn(
                     'px-4 py-2.5 text-[13px] font-bold uppercase tracking-wide text-white transition-colors hover:bg-white/15',
-                    item.active && 'bg-white/15',
+                    activeTab?.label === item.label && 'bg-white/15',
                   )}
                 >
                   {item.label}
@@ -198,22 +205,49 @@ export default function Header() {
         <div className="border-t border-slate-200 bg-white lg:hidden">
           <nav className="mx-auto max-w-7xl px-4 py-3" aria-label="Mobile">
             <div className="flex flex-wrap gap-1">
-              {navItems.map((item) => (
-                <Link
-                  key={item.label}
-                  to={item.href}
-                  className={cn(
-                    'px-3 py-2 text-[13px] font-bold uppercase tracking-wide',
-                    item.active ? 'bg-secondary-900 text-white' : 'text-slate-700',
-                  )}
-                >
-                  {item.label}
-                </Link>
-              ))}
+              {navItems.map((item) => {
+                if (item.hasDropdown) {
+                  return (
+                    <button
+                      key={item.label}
+                      type="button"
+                      onClick={() => setSectorsMenuOpen((v) => !v)}
+                      className={cn(
+                        'flex items-center gap-1 px-3 py-2 text-[13px] font-bold uppercase tracking-wide',
+                        sectorsMenuOpen ? 'bg-secondary-900 text-white' : 'text-slate-700',
+                      )}
+                      aria-expanded={sectorsMenuOpen}
+                    >
+                      {item.label}
+                      <ChevronDown
+                        className={cn(
+                          'size-3.5 transition-transform',
+                          sectorsMenuOpen && 'rotate-180',
+                        )}
+                      />
+                    </button>
+                  )
+                }
+                const isActive = activeTab?.label === item.label
+                return (
+                  <Link
+                    key={item.label}
+                    to={item.href}
+                    className={cn(
+                      'px-3 py-2 text-[13px] font-bold uppercase tracking-wide',
+                      isActive ? 'bg-secondary-900 text-white' : 'text-slate-700',
+                    )}
+                  >
+                    {item.label}
+                  </Link>
+                )
+              })}
             </div>
-            <div className="mt-3 border-t border-slate-200 pt-3">
-              <MobileSectorNav onNavigate={() => setMenuOpen(false)} />
-            </div>
+            {sectorsMenuOpen && (
+              <div className="mt-3 border-t border-slate-200 pt-3">
+                <MobileSectorNav onNavigate={() => setMenuOpen(false)} />
+              </div>
+            )}
           </nav>
         </div>
       )}

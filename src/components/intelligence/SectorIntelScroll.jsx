@@ -415,21 +415,25 @@ export default function SectorIntelScroll() {
             </span>
           </div>
         </div>
-        <div className="grid h-8 grid-cols-17 gap-px overflow-hidden rounded border border-slate-200">
-          {sectorIntel.map((sector) => (
-            <HeatmapBar key={sector.id} sector={sector} />
-          ))}
-        </div>
-        <div className="mt-1 flex justify-between px-0.5">
-          {sectorIntel.map((sector) => (
-            <span
-              key={sector.id}
-              className="text-[7px] font-medium text-slate-400 truncate"
-              title={sector.name}
-            >
-              {sector.shortName}
-            </span>
-          ))}
+        <div className="overflow-x-auto">
+          <div className="min-w-[420px]">
+            <div className="grid h-8 grid-cols-17 gap-px overflow-hidden rounded border border-slate-200">
+              {sectorIntel.map((sector) => (
+                <HeatmapBar key={sector.id} sector={sector} />
+              ))}
+            </div>
+            <div className="mt-1 flex justify-between px-0.5">
+              {sectorIntel.map((sector) => (
+                <span
+                  key={sector.id}
+                  className="text-[7px] font-medium text-slate-400 truncate"
+                  title={sector.name}
+                >
+                  {sector.shortName}
+                </span>
+              ))}
+            </div>
+          </div>
         </div>
       </div>
 

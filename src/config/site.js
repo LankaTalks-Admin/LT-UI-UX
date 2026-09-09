@@ -35,6 +35,7 @@ export const navItems = [
   { label: 'Knowledge Hub', href: '/knowledge-hub' },
   { label: 'Sectors', hasDropdown: true, right: true },
   { label: 'Archive', href: '/archive', right: true },
+  { label: 'aA', action: 'fontSize', right: true },
 ]
 
 export const footerLinks = [

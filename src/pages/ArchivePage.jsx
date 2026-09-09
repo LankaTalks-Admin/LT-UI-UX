@@ -689,7 +689,7 @@ function DayCalendar({ year, month, dayCounts, selectedDay, onSelectDay }) {
         {count > 0 && (
           <span
             className={cn(
-              'relative mt-0.5 text-[9px] font-bold',
+              'relative mt-0.5 hidden whitespace-nowrap text-[9px] font-bold sm:block',
               isSelected ? 'text-white/80' : 'text-brand-600',
             )}
           >

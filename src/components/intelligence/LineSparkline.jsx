@@ -28,7 +28,7 @@ export default function LineSparkline({ data, title, color = 'bg-brand-600', suf
   return (
     <div className="flex flex-col gap-3">
       {title && (
-        <div className="flex items-center justify-between">
+        <div className="flex flex-wrap items-center justify-between gap-2">
           <h3 className="text-[11px] font-bold uppercase tracking-wider text-slate-500">
             {title}
           </h3>

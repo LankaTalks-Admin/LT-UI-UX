@@ -84,7 +84,7 @@ export default function TradeBalanceChart({ data }) {
       </div>
 
       <div className={cn(
-        'mt-1 flex items-center justify-between rounded border border-slate-100 bg-slate-50 px-3 py-2',
+        'mt-1 flex flex-wrap items-center justify-between gap-2 rounded border border-slate-100 bg-slate-50 px-3 py-2',
       )}>
         <div className="flex items-center gap-2">
           <ArrowDownRight className="size-3.5 text-brand-500" aria-hidden="true" />

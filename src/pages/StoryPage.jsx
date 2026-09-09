@@ -6,6 +6,7 @@ import {
   Clock,
   Eye,
   Languages,
+  Volume2,
 } from 'lucide-react'
 import { useEffect, useRef, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
@@ -145,7 +146,16 @@ export default function StoryPage() {
                 <Eye className="size-3.5 text-slate-400" aria-hidden="true" />
                 {story.views.toLocaleString()} views
               </span>
-              <div className="ml-auto flex items-center gap-2">
+              <div className="ml-auto flex flex-wrap items-center gap-2">
+                <button
+                  type="button"
+                  aria-label="Listen to this article"
+                  className="flex cursor-pointer items-center gap-1.5 border border-slate-300 px-2.5 py-1 text-[11px] font-bold uppercase tracking-wider text-slate-600 transition-colors hover:border-secondary-900 hover:bg-secondary-900 hover:text-white"
+                >
+                  <Volume2 className="size-3.5" aria-hidden="true" />
+                  Listen
+                </button>
+
                 <div className="relative" ref={translateRef}>
                   <button
                     type="button"
@@ -159,7 +169,7 @@ export default function StoryPage() {
 
                   {translateOpen && (
                     <div className="absolute right-0 top-full z-30 mt-1 min-w-40 border border-slate-200 bg-white shadow-lg">
-                      {['English', 'Sinhala', 'Tamil'].map((lang) => (
+                      {['English', 'Sinhala', 'Tamil','Mandarin'].map((lang) => (
                         <button
                           key={lang}
                           type="button"

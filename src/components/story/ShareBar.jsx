@@ -51,7 +51,7 @@ export default function ShareBar({ title = '', compact = false }) {
   ]
 
   return (
-    <div className="flex items-center gap-1.5">
+    <div className="flex flex-wrap items-center gap-1.5">
       <span className="mr-1 flex items-center gap-1 text-[11px] font-bold uppercase tracking-wider text-slate-500">
         <Share2 className="size-3.5" aria-hidden="true" />
         Share

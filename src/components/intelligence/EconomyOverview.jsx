@@ -42,7 +42,7 @@ export default function EconomyOverview({ indicators }) {
                   </span>
                 )}
               </div>
-              <div className="flex items-baseline gap-2">
+              <div className="flex flex-wrap items-baseline gap-2">
                 <span className="font-mono text-[22px] font-light tracking-tight text-slate-900 transition-colors group-hover:text-brand-700">
                   {stat.value}
                 </span>

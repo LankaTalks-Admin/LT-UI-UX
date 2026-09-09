@@ -22,9 +22,18 @@ export default function Header() {
     (item) => item.href && location.pathname.startsWith(item.href),
   )
   const isHome = location.pathname === '/'
-  const showSectors = isHome || location.pathname.startsWith('/stories')
   const tagline = isHome ? siteConfig.tagline : activeTab?.label || siteConfig.tagline
   const sectorsRef = useRef(null)
+  const textSizeRef = useRef(null)
+  const [textSizeOpen, setTextSizeOpen] = useState(false)
+  const [fontScale, setFontScale] = useState(0)
+
+  useEffect(() => {
+    document.documentElement.style.zoom = [0.9, 1, 1.1][fontScale + 1]
+    return () => {
+      document.documentElement.style.zoom = ''
+    }
+  }, [fontScale])
 
   const openSectors = useCallback(() => {
     clearTimeout(sectorsTimer.current)
@@ -41,10 +50,22 @@ export default function Header() {
 
   useEffect(() => {
     const handleKey = (e) => {
-      if (e.key === 'Escape') setSectorsOpen(false)
+      if (e.key === 'Escape') {
+        setSectorsOpen(false)
+        setTextSizeOpen(false)
+      }
+    }
+    const handleClickOutside = (e) => {
+      if (textSizeRef.current && !textSizeRef.current.contains(e.target)) {
+        setTextSizeOpen(false)
+      }
     }
     document.addEventListener('keydown', handleKey)
-    return () => document.removeEventListener('keydown', handleKey)
+    document.addEventListener('mousedown', handleClickOutside)
+    return () => {
+      document.removeEventListener('keydown', handleKey)
+      document.removeEventListener('mousedown', handleClickOutside)
+    }
   }, [])
 
   useEffect(() => {
@@ -75,8 +96,8 @@ export default function Header() {
           >
             Subscribe
           </a>
-          <HeaderSearch />
           <WeatherWidget />
+          <HeaderSearch />
           <button
             type="button"
             aria-label={menuOpen ? 'Close menu' : 'Open menu'}
@@ -113,8 +134,57 @@ export default function Header() {
 
           <div className="flex items-center">
             {navItems
-              .filter((item) => item.right && (showSectors || !item.hasDropdown))
+              .filter((item) => item.right)
               .map((item) => {
+              if (item.action === 'fontSize') {
+                return (
+                  <div key={item.label} className="relative" ref={textSizeRef} onMouseEnter={() => clearTimeout(sectorsTimer.current)}>
+                    <button
+                      type="button"
+                      onClick={() => setTextSizeOpen((v) => !v)}
+                      aria-expanded={textSizeOpen}
+                      className={cn(
+                        'flex cursor-pointer items-center gap-1 px-4 py-2.5 text-[13px] font-bold uppercase tracking-wide text-white transition-colors hover:bg-white/15',
+                        textSizeOpen && 'bg-white/15',
+                      )}
+                    >
+                      <span className="text-[11px] font-bold normal-case">a</span>
+                      <span className="text-[16px] font-bold normal-case">A</span>
+                      <ChevronDown
+                        className={cn(
+                          'size-3 transition-transform',
+                          textSizeOpen && 'rotate-180',
+                        )}
+                        aria-hidden="true"
+                      />
+                    </button>
+
+                    {textSizeOpen && (
+                      <div
+                        className="absolute right-0 top-full z-50 min-w-40 border border-slate-200 bg-white py-1 shadow-xl"
+                        role="menu"
+                      >
+                        {[ -1, 0, 1 ].map((value) => (
+                          <button
+                            key={value}
+                            type="button"
+                            onClick={() => setFontScale(value)}
+                            className={cn(
+                              'block w-full cursor-pointer px-3 py-2 text-left text-[12px] font-semibold transition-colors',
+                              fontScale === value
+                                ? 'bg-secondary-900 text-white'
+                                : 'text-slate-700 hover:bg-secondary-900 hover:text-white',
+                            )}
+                            role="menuitem"
+                          >
+                            {value < 0 ? 'a' : value === 0 ? 'A' : 'A+'}
+                          </button>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                )
+              }
               if (item.hasDropdown) {
                 return (
                   <div
@@ -209,8 +279,53 @@ export default function Header() {
           <nav className="mx-auto max-w-7xl px-4 py-3" aria-label="Mobile">
             <div className="flex flex-wrap gap-1">
               {navItems.map((item) => {
+                if (item.action === 'fontSize') {
+                  return (
+                    <div key={item.label} className="relative" ref={textSizeRef}>
+                      <button
+                        type="button"
+                        onClick={() => setTextSizeOpen((v) => !v)}
+                        aria-expanded={textSizeOpen}
+                        className={cn(
+                          'flex items-center gap-1 px-3 py-2 text-[13px] font-bold uppercase tracking-wide',
+                          textSizeOpen ? 'bg-secondary-900 text-white' : 'text-slate-700',
+                        )}
+                      >
+                        <span className="text-[11px] font-bold normal-case">a</span>
+                        <span className="text-[16px] font-bold normal-case">A</span>
+                        <ChevronDown
+                          className={cn(
+                            'size-3.5 transition-transform',
+                            textSizeOpen && 'rotate-180',
+                          )}
+                        />
+                      </button>
+                      {textSizeOpen && (
+                        <div className="mt-1 flex flex-col border border-slate-200 bg-white shadow-lg">
+                          {[ -1, 0, 1 ].map((value) => (
+                            <button
+                              key={value}
+                              type="button"
+                              onClick={() => {
+                                setFontScale(value)
+                                setTextSizeOpen(false)
+                              }}
+                              className={cn(
+                                'px-3 py-2 text-left text-[12px] font-semibold',
+                                fontScale === value
+                                  ? 'bg-secondary-900 text-white'
+                                  : 'text-slate-700 hover:bg-secondary-900 hover:text-white',
+                              )}
+                            >
+                              {value < 0 ? 'a' : value === 0 ? 'A' : 'A+'}
+                            </button>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  )
+                }
                 if (item.hasDropdown) {
-                  if (!showSectors) return null
                   return (
                     <button
                       key={item.label}

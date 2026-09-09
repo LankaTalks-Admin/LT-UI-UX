@@ -29,7 +29,7 @@ export default function StoryCard({ story, layout = 'grid' }) {
               <p className="mt-1 line-clamp-2 text-xs text-slate-500">{story.excerpt}</p>
             )}
           </div>
-          <div className="mt-2 flex items-center gap-3 text-[11px] font-medium text-slate-500">
+          <div className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1 text-[11px] font-medium text-slate-500">
             {story.author && <span>{story.author}</span>}
             <span className="flex items-center gap-1">
               <Clock className="size-3" aria-hidden="true" />

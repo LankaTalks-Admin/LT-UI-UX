@@ -197,7 +197,7 @@ export default function LatestIntelGrid() {
       </div>
 
       {/* Summary stat bar */}
-      <div className="mb-5 grid grid-cols-3 gap-px overflow-hidden rounded border border-slate-200 bg-slate-200">
+      <div className="mb-5 grid grid-cols-1 gap-px overflow-hidden rounded border border-slate-200 bg-slate-200 sm:grid-cols-3">
         {Object.entries(typeCounts).map(([type, count]) => {
           const cfg = typeConfig[type]
           const Icon = cfg.icon

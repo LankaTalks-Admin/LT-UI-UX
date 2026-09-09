@@ -12,7 +12,7 @@ export default function BarChart({ data, title, unit = '', color = 'bg-brand-600
   return (
     <div className="flex flex-col gap-3">
       {title && (
-        <div className="flex items-center justify-between">
+        <div className="flex flex-wrap items-center justify-between gap-2">
           <h3 className="text-[11px] font-bold uppercase tracking-wider text-slate-500">
             {title}
           </h3>
@@ -88,7 +88,7 @@ export default function BarChart({ data, title, unit = '', color = 'bg-brand-600
         })}
       </div>
 
-      <div className="mt-1 flex items-center gap-4 rounded border border-slate-100 bg-slate-50 px-3 py-2">
+      <div className="mt-1 flex flex-wrap items-center gap-x-4 gap-y-1 rounded border border-slate-100 bg-slate-50 px-3 py-2">
         <span className="text-[9px] uppercase tracking-wider text-slate-400">Latest</span>
         <span className="font-mono text-[13px] font-bold text-slate-900">
           {latest}{unit}

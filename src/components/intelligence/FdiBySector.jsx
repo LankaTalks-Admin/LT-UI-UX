@@ -51,15 +51,15 @@ export default function FdiBySector({ data }) {
       </div>
 
       <div className="mt-1 grid grid-cols-3 gap-2 rounded border border-slate-100 bg-slate-50 px-3 py-2">
-        <div>
+        <div className="min-w-0">
           <span className="text-[8px] uppercase tracking-wider text-slate-400">Total FDI</span>
           <p className="font-mono text-[12px] font-bold text-slate-900">${total}M</p>
         </div>
-        <div>
+        <div className="min-w-0">
           <span className="text-[8px] uppercase tracking-wider text-slate-400">Top Sector</span>
-          <p className="text-[11px] font-semibold text-slate-900">{data[0].label}</p>
+          <p className="truncate text-[11px] font-semibold text-slate-900">{data[0].label}</p>
         </div>
-        <div>
+        <div className="min-w-0">
           <span className="text-[8px] uppercase tracking-wider text-slate-400">Sectors</span>
           <p className="font-mono text-[12px] font-bold text-slate-900">{data.length}</p>
         </div>
